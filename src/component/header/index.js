@@ -1,23 +1,24 @@
 /**
  * Created by axetroy on 17-4-6.
  */
-import React, { Component } from 'react';
-import PropTypes from 'proptypes';
-import { Menu, Icon, Tooltip } from 'antd';
-import { NavLink, matchPath, withRouter } from 'react-router-dom';
-import Octicon from 'react-octicon';
-import Rythm from 'rythm.js';
-
-import './index.css';
+import React, { Component } from 'react'
+import PropTypes from 'proptypes'
+import { Menu, Icon, Tooltip } from 'antd'
+import { NavLink, matchPath, withRouter } from 'react-router-dom'
+import Octicon from 'react-octicon'
+import Rythm from 'rythm.js'
+import avator from 'src/assets/images/avator.png'
+import info from 'src/info'
+import './index.css'
 
 class Header extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
-  };
+    history: PropTypes.object.isRequired,
+  }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       rythmState: 'stop',
       nav: [
@@ -25,91 +26,91 @@ class Header extends Component {
         {
           path: '/post',
           title: '博客文章',
-          icon: <Octicon name="book" mega />
+          icon: <Octicon name="book" mega />,
         },
         {
           path: '/repo',
           title: '开源项目',
-          icon: <Octicon name="repo" mega />
+          icon: <Octicon name="repo" mega />,
         },
         {
           path: '/todo',
           title: 'TODO',
-          icon: <Icon type="exception" />
+          icon: <Icon type="exception" />,
         },
         {
           path: '/gist',
           title: 'Gist',
-          icon: <Octicon name="gist" mega />
+          icon: <Octicon name="gist" mega />,
         },
         {
           path: '/github',
           title: 'Github',
-          icon: <Octicon name="mark-github" mega />
+          icon: <Octicon name="mark-github" mega />,
         },
         {
           path: '/case',
           title: '案例展示',
-          icon: <Icon type="book" />
+          icon: <Icon type="book" />,
         },
         {
           path: '/about',
           title: '关于我',
-          icon: <Icon type="question-circle" />
-        }
-      ].filter(v => v)
-    };
+          icon: <Icon type="question-circle" />,
+        },
+      ].filter(v => v),
+    }
   }
   componentDidMount() {
-    const rythm = new Rythm();
-    this.setState({ rythm });
+    const rythm = new Rythm()
+    this.setState({ rythm })
   }
 
   playMusic() {
-    const { rythm } = this.state;
+    const { rythm } = this.state
     if (rythm) {
       if (!this.__bgmLoaded) {
-        rythm.setMusic('./audio/bgm.mp3');
+        rythm.setMusic('./audio/bgm.mp3')
         rythm.addRythm('pulse2', 'pulse', 0, 10, {
           min: 0.1,
-          max: 1.5
-        });
-        this.__bgmLoaded = true;
+          max: 1.5,
+        })
+        this.__bgmLoaded = true
       }
-      rythm.start();
-      this.setState({ rythmState: 'play' });
+      rythm.start()
+      this.setState({ rythmState: 'play' })
     }
   }
 
   pauseMusic() {
-    const { rythm } = this.state;
+    const { rythm } = this.state
     if (rythm) {
-      rythm.stop();
-      this.setState({ rythmState: 'stop' });
+      rythm.stop()
+      this.setState({ rythmState: 'stop' })
     }
   }
 
   render() {
-    const pathname = this.props.location.pathname;
-    const navClassName = 'ant-menu-item-selected';
+    const pathname = this.props.location.pathname
+    const navClassName = 'ant-menu-item-selected'
     return (
       <div
         id="header"
         style={{
-          position: 'relative'
-        }}
-      >
+          position: 'relative',
+        }}>
         <div
           className="blur"
           style={{
             width: '100%',
             height: '20rem',
-            backgroundImage: 'url(https://user-images.githubusercontent.com/9758711/35051962-65350bb6-fbe1-11e7-91e3-c79da2cb5e73.jpg)',
+            backgroundImage:
+              'url(https://user-images.githubusercontent.com/9758711/35051962-65350bb6-fbe1-11e7-91e3-c79da2cb5e73.jpg)',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundAttachment: 'inherit',
             backgroundPosition: 'center',
-            position: 'relative'
+            position: 'relative',
           }}
         />
         <div
@@ -120,30 +121,27 @@ class Header extends Component {
             textAlign: 'center',
             color: '#fff',
             width: '100%',
-            height: '100%'
-          }}
-        >
+            height: '100%',
+          }}>
           <div
             style={{
-              marginTop: '3rem'
-            }}
-          >
+              marginTop: '3rem',
+            }}>
             <img
               style={{
                 width: '10rem',
-                borderRadius: '50%'
+                borderRadius: '50%',
               }}
-              src="https://avatars1.githubusercontent.com/u/9758711?v=3"
+              src={avator}
               alt=""
             />
             <h2>
-              <span style={{ color: '#fff' }}>Axetroy</span>
+              <span style={{ color: '#fff' }}>{info.name}</span>
               <Tooltip
                 placement="right"
                 title={
                   this.state.rythmState === 'stop' ? 'Play Music' : 'Pause'
-                }
-              >
+                }>
                 <div
                   className="pulse2"
                   style={{
@@ -157,26 +155,25 @@ class Header extends Component {
                     display: 'inline-block',
                     marginLeft: '0.6rem',
                     marginTop: '0.4rem',
-                    verticalAlign: 'middle'
+                    verticalAlign: 'middle',
                   }}
                   onClick={() => {
                     if (this.state.rythmState === 'stop') {
-                      this.playMusic();
+                      this.playMusic()
                     } else {
-                      this.pauseMusic();
+                      this.pauseMusic()
                     }
                   }}
                 />
               </Tooltip>
             </h2>
-            <q>有些事现在不做 一辈子都不会做了</q>
+            <q>{info.motto}</q>
           </div>
           <div
             style={{
               float: 'right',
-              marginRight: '2rem'
-            }}
-          >
+              marginRight: '2rem',
+            }}>
             <Icon
               type="search"
               style={{
@@ -186,13 +183,13 @@ class Header extends Component {
                 border: '1px solid #64ceaa',
                 borderRadius: '50%',
                 backgroundColor: '#64ceaa',
-                padding: '0.5rem'
+                padding: '0.5rem',
               }}
               onClick={() => {
                 this.props.history.push({
                   ...this.props.location,
-                  pathname: '/search'
-                });
+                  pathname: '/search',
+                })
               }}
             />
           </div>
@@ -203,32 +200,30 @@ class Header extends Component {
               <Menu.Item
                 key={nav.path}
                 className={(() => {
-                  const navPath = nav.path;
+                  const navPath = nav.path
                   const isMatchRoute = matchPath(pathname, {
-                    path: navPath
-                  });
+                    path: navPath,
+                  })
                   if (pathname === '/') {
-                    return pathname === navPath ? navClassName : '';
+                    return pathname === navPath ? navClassName : ''
                   } else {
-                    return isMatchRoute && navPath !== '/' ? navClassName : '';
+                    return isMatchRoute && navPath !== '/' ? navClassName : ''
                   }
-                })()}
-              >
+                })()}>
                 <NavLink
                   to={nav.path}
                   style={{
-                    fontSize: '1.4rem'
-                  }}
-                >
+                    fontSize: '1.4rem',
+                  }}>
                   {nav.icon ? nav.icon : ''}
                   {nav.title}
                 </NavLink>
               </Menu.Item>
-            );
+            )
           })}
         </Menu>
       </div>
-    );
+    )
   }
 }
-export default withRouter(Header);
+export default withRouter(Header)

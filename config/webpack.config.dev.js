@@ -12,6 +12,10 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const getClientEnvironment = require('./env')
 const paths = require('./paths')
 
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
+
 function setupSingles() {
   const entry = {
     index: [
@@ -101,11 +105,20 @@ let webpackConfig = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: [
+      '.web.js',
+      '.mjs',
+      '.js',
+      '.json',
+      '.web.jsx',
+      '.jsx',
+      '.less',
+    ],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      src: resolve('src'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -206,6 +219,34 @@ let webpackConfig = {
                   ],
                 },
               },
+            ],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              'style-loader',
+              'css-loader',
+              {
+                loader: require.resolve('postcss-loader'),
+                options: {
+                  // Necessary for external CSS imports to work
+                  // https://github.com/facebookincubator/create-react-app/issues/2677
+                  ident: 'postcss',
+                  plugins: () => [
+                    require('postcss-flexbugs-fixes'),
+                    autoprefixer({
+                      browsers: [
+                        '>1%',
+                        'last 4 versions',
+                        'Firefox ESR',
+                        'not ie < 9', // React doesn't support IE8 anyway
+                      ],
+                      flexbox: 'no-2009',
+                    }),
+                  ],
+                },
+              },
+              { loader: 'less-loader' },
             ],
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.

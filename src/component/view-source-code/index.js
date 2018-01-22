@@ -2,29 +2,29 @@
  * Created by axetroy on 17-5-24.
  */
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
-import { Modal } from 'antd';
+import { Modal } from 'antd'
 
-import SourceCode from '../source-code';
+import SourceCode from '../source-code'
 
 class ViewSourceCode extends Component {
   state = {
     visible: false,
-  };
+  }
 
   showSourceCode() {
     this.setState({
       visible: true,
-    });
+    })
   }
 
   hideSourceCode() {
     this.setState({
       visible: false,
-    });
+    })
   }
 
   render() {
@@ -40,19 +40,18 @@ class ViewSourceCode extends Component {
           onCancel={this.hideSourceCode.bind(this)}
           onOk={this.hideSourceCode.bind(this)}
           maskClosable={true}
-          closable={true}
-        >
+          closable={true}>
           <SourceCode file={this.props.file} />
         </Modal>
       </span>
-    );
+    )
   }
 }
 export default connect(
   function mapStateToProps(state) {
-    return {};
+    return {}
   },
   function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({}, dispatch)
   }
-)(ViewSourceCode);
+)(ViewSourceCode)

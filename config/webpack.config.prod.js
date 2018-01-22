@@ -17,6 +17,10 @@ const getClientEnvironment = require('./env')
 
 const isReport = process.env.npm_config_report
 
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
+
 function setupSingles() {
   const entry = {
     index: [require.resolve('./polyfills'), paths.appIndexJs],
@@ -137,11 +141,20 @@ const webpackConfig = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: [
+      '.web.js',
+      '.mjs',
+      '.js',
+      '.json',
+      '.web.jsx',
+      '.jsx',
+      '.less',
+    ],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      src: resolve('src'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -261,6 +274,44 @@ const webpackConfig = {
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+          },
+          {
+            test: /\.less$/,
+            loader: ExtractTextPlugin.extract(
+              Object.assign({
+                fallback: require.resolve('style-loader'),
+                use: [
+                  {
+                    loader: require.resolve('css-loader'),
+                    options: {
+                      importLoaders: 1,
+                      minimize: true,
+                    },
+                  },
+                  {
+                    loader: require.resolve('postcss-loader'),
+                    options: {
+                      // Necessary for external CSS imports to work
+                      // https://github.com/facebookincubator/create-react-app/issues/2677
+                      ident: 'postcss',
+                      plugins: () => [
+                        require('postcss-flexbugs-fixes'),
+                        autoprefixer({
+                          browsers: [
+                            '>1%',
+                            'last 4 versions',
+                            'Firefox ESR',
+                            'not ie < 9', // React doesn't support IE8 anyway
+                          ],
+                          flexbox: 'no-2009',
+                        }),
+                      ],
+                    },
+                  },
+                  { loader: 'less-loader' },
+                ],
+              })
+            ),
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
