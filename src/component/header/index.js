@@ -9,6 +9,7 @@ import Octicon from 'react-octicon'
 import Rythm from 'rythm.js'
 import avator from 'src/assets/images/avator.png'
 import info from 'src/info'
+import NeteasePlayer from 'src/component/netease-player'
 import './index.css'
 
 class Header extends Component {
@@ -169,6 +170,7 @@ class Header extends Component {
             </h2>
             <q>{info.motto}</q>
           </div>
+          {/* <NeteasePlayer /> */}
           <div
             style={{
               float: 'right',

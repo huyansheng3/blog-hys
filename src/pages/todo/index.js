@@ -1,39 +1,38 @@
 /**
  * Created by axetroy on 17-4-6.
  */
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { Spin, Steps, Icon, Tooltip, Tag } from 'antd';
-import moment from 'moment';
-
-import DocumentTitle from '../../component/document-title';
-import ViewSourceCode from '../../component/view-source-code';
-import github from '../../lib/github';
-import * as todoAction from '../../redux/todo';
-import CONFIG from '../../config.json';
-import { diffTime } from '../../lib/utils';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { Spin, Steps, Icon, Tooltip, Tag } from 'antd'
+import moment from 'moment'
+import EditThisPage from 'src/shared/edit-this-page'
+import DocumentTitle from '../../component/document-title'
+import github from '../../lib/github'
+import * as todoAction from '../../redux/todo'
+import CONFIG from '../../config.json'
+import { diffTime } from '../../lib/utils'
 
 class Todo extends Component {
-  state = {};
+  state = {}
 
   async componentWillMount() {
-    let { number } = this.props.match.params;
+    let { number } = this.props.match.params
     if (number) {
-      await this.getTodo(number);
+      await this.getTodo(number)
     }
   }
 
   async componentWillReceiveProps(nextProp) {
-    const { number } = nextProp.match.params;
+    const { number } = nextProp.match.params
     if (number && number !== this.props.match.params.number) {
-      await this.getTodo(nextProp.match.params.number);
+      await this.getTodo(nextProp.match.params.number)
     }
   }
 
   async getTodo(number) {
-    let todo = {};
+    let todo = {}
     try {
       const { data } = await github.get(
         `/repos/${CONFIG.owner}/${CONFIG.todo_repo}/issues/${number}`,
@@ -43,37 +42,25 @@ class Todo extends Component {
           },
           responseType: 'text',
         }
-      );
-      todo = data;
+      )
+      todo = data
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-    this.props.setTodo({ [number]: todo });
-    return todo;
+    this.props.setTodo({ [number]: todo })
+    return todo
   }
 
   render() {
-    const { number } = this.props.match.params;
-    const todo = this.props.TODO[number] || {};
+    const { number } = this.props.match.params
+    const todo = this.props.TODO[number] || {}
+
     return (
       <DocumentTitle title={[todo.title, 'TODO']}>
         <Spin spinning={!Object.keys(todo).length}>
           <div className="toolbar-container">
-            <div className="edit-this-page">
-              <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-                <ViewSourceCode file="pages/todo/index.js">
-                  <a href="javascript: void 0" target="_blank">
-                    <Icon
-                      type="code"
-                      style={{
-                        fontSize: '3rem',
-                      }}
-                    />
-                  </a>
-                </ViewSourceCode>
-              </Tooltip>
-            </div>
-            {todo.title ? (
+            <EditThisPage sourcePage="pages/todo/index.js" />
+            {todo.title && (
               <h2 style={{ textAlign: 'center', margin: '1rem 0' }}>
                 {todo.title}
                 <Tooltip placement="topLeft" title="编辑此页">
@@ -81,20 +68,16 @@ class Todo extends Component {
                     href={`https://github.com/${CONFIG.owner}/${
                       CONFIG.todo_repo
                     }/issues/${todo.number}`}
-                    target="_blank"
-                  >
+                    target="_blank">
                     <Icon type="edit" />
                   </a>
                 </Tooltip>
               </h2>
-            ) : (
-              ''
             )}
             <Steps
               style={{
                 margin: '2rem 0',
-              }}
-            >
+              }}>
               <Steps.Step
                 status="finish"
                 title="创建计划"
@@ -111,12 +94,12 @@ class Todo extends Component {
                     ? (() => {
                         const diff = diffTime(new Date(todo.created_at))(
                           new Date(todo.closed_at)
-                        );
+                        )
                         return `耗时${diff.days ? diff.days + '天' : ''} ${
                           diff.hours || diff.days ? diff.hours + '时' : ''
                         }${
                           diff.minutes || diff.hours ? diff.minutes + '分' : ''
-                        }${diff.seconds}秒`;
+                        }${diff.seconds}秒`
                       })()
                     : '进行中...'
                 }
@@ -141,7 +124,7 @@ class Todo extends Component {
                   <Tag key={label.id} color={'#' + label.color}>
                     {label.name}
                   </Tag>
-                );
+                )
               })}
             </div>
             <div
@@ -157,12 +140,12 @@ class Todo extends Component {
           </div>
         </Spin>
       </DocumentTitle>
-    );
+    )
   }
 }
 export default connect(
   function mapStateToProps(state) {
-    return { TODO: state.TODO };
+    return { TODO: state.TODO }
   },
   function mapDispatchToProps(dispatch) {
     return bindActionCreators(
@@ -170,6 +153,6 @@ export default connect(
         setTodo: todoAction.set,
       },
       dispatch
-    );
+    )
   }
-)(withRouter(Todo));
+)(withRouter(Todo))
