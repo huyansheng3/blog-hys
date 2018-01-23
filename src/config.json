@@ -6,12 +6,12 @@
   "github_client_secret": "4da33dd6fcb0a01d395945ad18613ecf9c12079e",
   "firebase": {
     "config": {
-      "apiKey": "AIzaSyDTCaJ23z7O393k_5w79z40XBNVURiAxb8",
-      "authDomain": "blog-9281a.firebaseapp.com",
-      "databaseURL": "https://blog-9281a.firebaseio.com",
-      "projectId": "blog-9281a",
-      "storageBucket": "blog-9281a.appspot.com",
-      "messagingSenderId": "989620354189"
+      "apiKey": "AIzaSyBPaxmkDC0eUmVDksTwx8M0f2pRKZzpNA8",
+      "authDomain": "huyansheng1.firebaseapp.com",
+      "databaseURL": "https://huyansheng1.firebaseio.com",
+      "projectId": "huyansheng1",
+      "storageBucket": "huyansheng1.appspot.com",
+      "messagingSenderId": "737699909600"
     },
     "account": {
       "email": "troy450409405@gmail.com",

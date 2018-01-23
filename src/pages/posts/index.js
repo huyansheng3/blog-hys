@@ -1,254 +1,248 @@
 /**
  * Created by axetroy on 17-4-6.
  */
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Spin, Pagination, Row, Col, Card, Tag, Icon, Tooltip } from "antd";
-import { NavLink, withRouter } from "react-router-dom";
-import moment from "moment";
-import queryString from "query-string";
-import LazyLoad from "react-lazyload";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { Spin, Pagination, Row, Col, Card, Tag, Icon, Tooltip } from 'antd'
+import { Link, withRouter } from 'react-router-dom'
+import moment from 'moment'
+import queryString from 'query-string'
+import LazyLoad from 'react-lazyload'
 
-import DocumentTitle from "../../component/document-title";
-import ViewSourceCode from "../../component/view-source-code";
-import github from "../../lib/github";
-import { firstUpperCase } from "../../lib/utils";
+import DocumentTitle from '../../component/document-title'
+import ViewSourceCode from '../../component/view-source-code'
+import github from '../../lib/github'
+import { firstUpperCase } from '../../lib/utils'
 
-import * as postAction from "../../redux/posts";
+import * as postAction from '../../redux/posts'
 
-import CONFIG from "../../config.json";
+import CONFIG from '../../config.json'
 
-import "./index.css";
+import './index.css'
 
 class Posts extends Component {
   state = {
     meta: {
       page: 1,
       per_page: 10,
-      total: 0
-    }
-  };
+      total: 0,
+    },
+  }
 
-  async componentWillMount() {
-    const query = queryString.parse(this.props.location.search);
-    let { page, per_page } = query;
-    page = +page || this.state.meta.page;
-    per_page = +per_page || this.state.meta.per_page;
+  componentDidMount() {
+    const query = queryString.parse(this.props.location.search)
+    let { page, per_page } = query
+    page = +page || this.state.meta.page
+    per_page = +per_page || this.state.meta.per_page
     this.setState({
       meta: {
         ...this.state.meta,
-        ...{ page: +page, per_page: +per_page }
-      }
-    });
-    await this.getPosts(page, per_page);
+        page: +page,
+        per_page: +per_page,
+      },
+    })
+    this.getPosts(page, per_page)
   }
 
   async getPosts(page, per_page) {
-    let posts = this.props.POSTS || [];
+    let posts = this.props.POSTS || []
     try {
       const res = await github.get(
         `/repos/${CONFIG.owner}/${CONFIG.repo}/issues`,
         {
-          params: { creator: CONFIG.owner, page, per_page, state: "open" }
+          params: { creator: CONFIG.owner, page, per_page, state: 'open' },
         }
-      );
+      )
 
-      const link = res.headers.link;
+      const link = res.headers.link
 
       /**
        * Pagination
        * # see detail https://developer.github.com/guides/traversing-with-pagination/
        */
       if (link) {
-        const last = link.match(/<([^>]+)>(?=\;\s+rel="last")/);
-        const lastPage = last ? last[1].match(/page=(\d+)/)[1] : page;
+        const last = link.match(/<([^>]+)>(?=\;\s+rel="last")/)
+        const lastPage = last ? last[1].match(/page=(\d+)/)[1] : page
         this.setState({
           meta: {
             ...this.state.meta,
-            ...{ page, per_page, total: lastPage * per_page }
-          }
-        });
+            ...{ page, per_page, total: lastPage * per_page },
+          },
+        })
       }
 
-      posts = res.data;
+      posts = res.data
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
 
     posts.forEach(post => {
       // 获取第一张图片作为缩略图
-      let match = /!\[[^\]]+\]\(([^\)]+)\)/im.exec(post.body);
+      let match = /!\[[^\]]+\]\(([^\)]+)\)/im.exec(post.body)
       if (match && match[1]) {
-        post.thumbnails = match[1];
+        post.thumbnails = match[1]
       }
-    });
+    })
 
-    this.props.setPosts(posts);
+    this.props.setPosts(posts)
 
-    return posts;
+    return posts
   }
 
   changePage(page, per_page) {
-    const oldQuery = queryString.parse(this.props.location.search);
+    const oldQuery = queryString.parse(this.props.location.search)
     this.props.history.push({
       ...this.props.location,
-      search: queryString.stringify(Object.assign(oldQuery, { page, per_page }))
-    });
-    this.getPosts(page, per_page);
+      search: queryString.stringify(
+        Object.assign(oldQuery, { page, per_page })
+      ),
+    })
+    this.getPosts(page, per_page)
   }
 
   render() {
     return (
-      <DocumentTitle title={["博客文章"]}>
+      <DocumentTitle title={['博客文章']}>
         <Spin spinning={false}>
-          <div className={"toolbar-container"}>
+          <div className={'toolbar-container'}>
             <div className="edit-this-page">
               <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-                <ViewSourceCode file="pages/posts/index.js">
-                  <a href="javascript: void 0" target="_blank">
+                <a href="javascript: void 0" target="_blank">
+                  <ViewSourceCode file="pages/posts/index.js">
                     <Icon
                       type="code"
                       style={{
-                        fontSize: "3rem"
+                        fontSize: '3rem',
                       }}
                     />
-                  </a>
-                </ViewSourceCode>
+                  </ViewSourceCode>
+                </a>
               </Tooltip>
             </div>
             {this.props.POSTS.map((post, i) => {
               return (
                 <Card
-                  style={{ margin: "2rem 0" }}
+                  style={{ margin: '2rem 0' }}
                   className="post-list"
-                  key={post.number + "/" + i}
-                >
+                  key={post.number + '/' + i}>
                   <div>
                     <h3 className="post-title">
-                      <NavLink
-                        exact={true}
+                      <Link
                         to={`/post/${post.number}`}
-                        title={post.title}
                         style={{
-                          wordBreak: "break-word",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden"
-                        }}
-                      >
+                          wordBreak: 'break-word',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                        }}>
                         {post.title}
-                      </NavLink>
+                      </Link>
                     </h3>
                   </div>
-                  <div style={{ margin: "0.5rem 0" }}>
+                  <div style={{ margin: '0.5rem 0' }}>
                     <span>
-                        {(post.labels || []).map(label => {
-                          return (
-                            <Tag key={label.id} color={"#" + label.color}>
-                              {label.name}
-                            </Tag>
-                          );
-                        })}
-                      </span>
+                      {(post.labels || []).map(label => {
+                        return (
+                          <Tag key={label.id} color={'#' + label.color}>
+                            {label.name}
+                          </Tag>
+                        )
+                      })}
+                    </span>
                   </div>
-                  <div style={{ color: "#9E9E9E", wordBreak: "break-all" }}>
+                  <div style={{ color: '#9E9E9E', wordBreak: 'break-all' }}>
                     {post.body.slice(0, 500)}...
                   </div>
                   <div
                     style={{
-                      marginTop: "2rem",
-                      paddingTop: "2rem",
-                      borderTop: "1px solid #e6e6e6"
-                    }}
-                  >
-                    {post.user.avatar_url ? (
+                      marginTop: '2rem',
+                      paddingTop: '2rem',
+                      borderTop: '1px solid #e6e6e6',
+                    }}>
+                    {post.user.avatar_url && (
                       <LazyLoad height={44}>
                         <img
                           src={post.user.avatar_url}
                           alt=""
                           style={{
-                            width: "4.4rem",
-                            height: "100%",
-                            borderRadius: "50%",
-                            marginRight: "0.5rem",
-                            verticalAlign: "middle"
+                            width: '4.4rem',
+                            height: '4.4rem',
+                            borderRadius: '50%',
+                            marginRight: '0.5rem',
+                            verticalAlign: 'middle',
                           }}
                         />
                       </LazyLoad>
-                    ) : (
-                      ""
                     )}
                     <div
                       style={{
-                        display: "inline-block",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                      }}>
                       <strong>
                         <Icon
                           type="user"
                           style={{
-                            marginRight: "0.5rem"
+                            marginRight: '0.5rem',
                           }}
                         />
                         {firstUpperCase(post.user.login)}
                       </strong>
-                      <br/>
+                      <br />
                       <span>
                         <Icon
                           type="calendar"
-                          style={{ marginRight: "0.5rem" }}
+                          style={{ marginRight: '0.5rem' }}
                         />
                         {moment(new Date(post.created_at)).fromNow()}
                       </span>
-                      <br/>
+                      <br />
                       <span>
                         <Icon
                           type="message"
-                          style={{ marginRight: "0.5rem" }}
+                          style={{ marginRight: '0.5rem' }}
                         />
                         {post.comments}
                       </span>
                     </div>
                   </div>
                 </Card>
-              );
+              )
             })}
 
-            {this.state.meta.total > 0 ? (
+            {Boolean(this.state.meta.total) && (
               <Row className="text-center">
-                <Col span={24} style={{ transition: "all 1s" }}>
+                <Col span={24} style={{ transition: 'all 1s' }}>
                   <Pagination
                     onChange={page =>
                       this.changePage(page, this.state.meta.per_page)
                     }
+                    hideOnSinglePage
                     defaultCurrent={this.state.meta.page}
                     defaultPageSize={this.state.meta.per_page}
                     total={this.state.meta.total}
                   />
                 </Col>
               </Row>
-            ) : (
-              ""
             )}
           </div>
         </Spin>
       </DocumentTitle>
-    );
+    )
   }
 }
 export default connect(
   function mapStateToProps(state) {
     return {
-      POSTS: state.POSTS
-    };
+      POSTS: state.POSTS,
+    }
   },
   function mapDispatchToProps(dispatch) {
     return bindActionCreators(
       {
-        setPosts: postAction.set
+        setPosts: postAction.set,
       },
       dispatch
-    );
+    )
   }
-)(withRouter(Posts));
+)(withRouter(Posts))

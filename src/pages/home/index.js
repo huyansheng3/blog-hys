@@ -68,16 +68,16 @@ class Home extends Component {
               </Tooltip>
 
               <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-                <ViewSourceCode file="pages/home/index.js">
-                  <a href="javascript: void 0" target="_blank">
+                <a href="javascript: void 0">
+                  <ViewSourceCode file="pages/home/index.js">
                     <Icon
                       type="code"
                       style={{
                         fontSize: '3rem',
                       }}
                     />
-                  </a>
-                </ViewSourceCode>
+                  </ViewSourceCode>
+                </a>
               </Tooltip>
             </div>
             <div

@@ -24,7 +24,7 @@ class Header extends Component {
       nav: [
         { path: '/', name: 'home', title: 'Home', icon: <Icon type="home" /> },
         {
-          path: '/post',
+          path: '/posts',
           title: '博客文章',
           icon: <Octicon name="book" mega />,
         },

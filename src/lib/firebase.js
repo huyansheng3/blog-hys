@@ -9,16 +9,8 @@ import CONFIG from '../config.json'
 
 const FIREBASE_CONFIG = CONFIG.firebase
 
-const user = FIREBASE_CONFIG.account
+firebase.initializeApp(FIREBASE_CONFIG.config)
 
-const app = firebase.initializeApp(FIREBASE_CONFIG.config)
+export default firebase
 
-function main() {
-  return app
-}
-
-export function init() {
-  return firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-}
-
-export default main()
+export function init() {}

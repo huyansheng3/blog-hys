@@ -104,15 +104,15 @@ class App extends Component {
                       )}
                     />
                     <Route
-                      path="/post/:number"
+                      path="/posts"
                       render={() => (
-                        <DynamicLoad promise={import('./pages/post')} />
+                        <DynamicLoad promise={import('./pages/posts')} />
                       )}
                     />
                     <Route
-                      path="/post"
+                      path="/post/:number"
                       render={() => (
-                        <DynamicLoad promise={import('./pages/posts')} />
+                        <DynamicLoad promise={import('./pages/post')} />
                       )}
                     />
                     <Route
