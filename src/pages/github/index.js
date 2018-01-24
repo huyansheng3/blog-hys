@@ -1,59 +1,41 @@
 /**
  * Created by axetroy on 17-4-6.
  */
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Card, Icon, Tooltip } from 'antd';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { Card, Icon, Tooltip } from 'antd'
+import GithubUserInfo from '../../component/github-user-info'
+import GithubFollowers from '../../component/github-followers'
+import GithubFollowing from '../../component/github-following'
+import GithubRepositories from '../../component/github-repo'
+import GithubOrgs from '../../component/github-orgs'
+import GithubLang from '../../component/github-lang'
+import EditThisPage from 'src/shared/edit-this-page'
+import DocumentTitle from '../../component/document-title'
 
-import GithubUserInfo from '../../component/github-user-info';
-import GithubFollowers from '../../component/github-followers';
-import GithubFollowing from '../../component/github-following';
-import GithubRepositories from '../../component/github-repo';
-import GithubOrgs from '../../component/github-orgs';
-import GithubLang from '../../component/github-lang';
-import ViewSourceCode from '../../component/view-source-code';
+import './index.css'
 
-import DocumentTitle from '../../component/document-title';
-
-import './index.css';
-
-import CONFIG from '../../config.json';
+import CONFIG from '../../config.json'
 
 class Github extends Component {
-  state = {};
+  state = {}
   async componentWillMount() {
-    const module = await import('@axetroy/react-github-calendar');
-    this.setState({ GithubCalendar: module.default });
+    const module = await import('@axetroy/react-github-calendar')
+    this.setState({ GithubCalendar: module.default })
   }
   render() {
-    const GithubCalendar = this.state ? this.state.GithubCalendar : null;
+    const GithubCalendar = this.state ? this.state.GithubCalendar : null
     return (
       <DocumentTitle title={['Github']}>
         <div className="toolbar-container">
-          <div className="edit-this-page">
-            <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-              <ViewSourceCode file="pages/github/index.js">
-                <a href="javascript: void 0" target="_blank">
-                  <Icon
-                    type="code"
-                    style={{
-                      fontSize: '3rem',
-                    }}
-                  />
-                </a>
-              </ViewSourceCode>
-            </Tooltip>
-          </div>
-
+          <EditThisPage sourcePage="pages/github/index.js" />
           <h2 className="github-title">活跃度</h2>
-
           <div
             style={{
               overflow: 'auto',
-            }}
-          >
-            {GithubCalendar ? (
+            }}>
+            {GithubCalendar && (
               <GithubCalendar
                 style={{
                   width: '100%',
@@ -61,8 +43,6 @@ class Github extends Component {
                 }}
                 name={CONFIG.owner}
               />
-            ) : (
-              ''
             )}
           </div>
 
@@ -98,14 +78,14 @@ class Github extends Component {
           </Card>
         </div>
       </DocumentTitle>
-    );
+    )
   }
 }
 export default connect(
   function mapStateToProps(state) {
-    return {};
+    return {}
   },
   function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({}, dispatch)
   }
-)(Github);
+)(Github)

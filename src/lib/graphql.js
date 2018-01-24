@@ -2,7 +2,7 @@
  * Created by axetroy on 17-6-12.
  */
 
-import axios from 'axios';
+import axios from 'axios'
 
 export default function(query = '') {
   return function() {
@@ -15,10 +15,10 @@ export default function(query = '') {
         headers: {
           Accept: 'application/json;charset=utf-8',
           Authorization: `bearer ${atob(
-            'M2ZkYmU2ZmY1NjlhYTlmMzNhYzVhYjJmODRjZWUxY2Q1YzdkNjE5Zg=='
+            'NWExNGY0ZWE4YTdiODlkMGZiODMzNTdhZTQ4NDM5NzRhNjlmZjA0MQ=='
           )}`,
         },
       }
-    );
-  };
+    )
+  }
 }

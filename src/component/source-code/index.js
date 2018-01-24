@@ -10,6 +10,7 @@ import axios from 'axios'
 import CONFIG from '../../config.json'
 import github from '../../lib/github'
 
+const { owner } = CONFIG
 class SourceCode extends Component {
   state = {
     source: null,
@@ -63,7 +64,7 @@ ${raw}
             <h2>
               <a
                 href={
-                  'https://github.com/axetroy/blog/blob/master/' +
+                  `https://github.com/${owner}/blog/blob/master/` +
                   this.state.source.path
                 }
                 target="_blank">

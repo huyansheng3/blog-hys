@@ -1,19 +1,20 @@
 /**
  * Created by axetroy on 17-4-6.
  */
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { Spin, Tooltip, Icon, Col, Row, Card, Tag } from 'antd';
-import Lightbox from 'react-image-lightbox';
-import LazyLoad from 'react-lazyload';
-import github from '../../lib/github';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { Spin, Tooltip, Icon, Col, Row, Card, Tag } from 'antd'
+import Lightbox from 'react-image-lightbox'
+import LazyLoad from 'react-lazyload'
+import github from '../../lib/github'
+import CONFIG from 'src/config.json'
+import DocumentTitle from '../../component/document-title'
+import ViewSourceCode from '../../component/view-source-code'
+import * as showCaseAction from '../../redux/showcases'
 
-import DocumentTitle from '../../component/document-title';
-import ViewSourceCode from '../../component/view-source-code';
-
-import * as showCaseAction from '../../redux/showcases';
+const { owner } = CONFIG
 
 /**
  * parse the data
@@ -21,61 +22,61 @@ import * as showCaseAction from '../../redux/showcases';
  * @returns {{title, description: string, gallery: Array.<*>}}
  */
 function dataParser(d) {
-  const body = d.body;
+  const body = d.body
 
-  const lines = body.split('\n');
+  const lines = body.split('\n')
 
-  let homePageLine = -1;
-  let descriptionStartLineNumber = -1;
-  let descriptionEndLineNumber = -1;
-  let galleryStartLineNumber = -1;
-  let galleryEndLineNumber = -1;
+  let homePageLine = -1
+  let descriptionStartLineNumber = -1
+  let descriptionEndLineNumber = -1
+  let galleryStartLineNumber = -1
+  let galleryEndLineNumber = -1
 
   for (let i = 0; i < lines.length - 1; i++) {
-    const line = lines[i].trim();
+    const line = lines[i].trim()
     if (line.indexOf(`<!-- homepage-start -->`) >= 0) {
-      homePageLine = i + 1;
+      homePageLine = i + 1
     } else if (line.indexOf(`<!-- description-start -->`) >= 0) {
-      descriptionStartLineNumber = i + 1;
+      descriptionStartLineNumber = i + 1
     } else if (line.indexOf(`<!-- description-end -->`) >= 0) {
-      descriptionEndLineNumber = i - 1;
+      descriptionEndLineNumber = i - 1
     } else if (line.indexOf(`<!-- gallery-start -->`) >= 0) {
-      galleryStartLineNumber = i + 1;
+      galleryStartLineNumber = i + 1
     } else if (line.indexOf(`<!-- gallery-end -->`) >= 0) {
-      galleryEndLineNumber = i - 1;
+      galleryEndLineNumber = i - 1
     }
   }
 
-  const description = [];
-  const gallery = [];
-  let homepage = '';
+  const description = []
+  const gallery = []
+  let homepage = ''
 
   body.split('\n').forEach((line, i) => {
     if (i === homePageLine) {
-      homepage = line.trim();
+      homepage = line.trim()
     } else if (
       i >= descriptionStartLineNumber &&
       i <= descriptionEndLineNumber
     ) {
-      description.push(line);
+      description.push(line)
     } else if (i >= galleryStartLineNumber && i <= galleryEndLineNumber) {
-      gallery.push(line);
+      gallery.push(line)
     }
-  });
+  })
 
   const _gallery = gallery.map(line => {
-    const match = line.trim().match(/\[([^\]]+)\]\(([^\)]+)\)/im);
+    const match = line.trim().match(/\[([^\]]+)\]\(([^\)]+)\)/im)
     if (match) {
-      const name = match[1];
-      const url = match[2];
+      const name = match[1]
+      const url = match[2]
       return {
         name,
         url,
-      };
+      }
     } else {
-      return void 0;
+      return void 0
     }
-  });
+  })
 
   return {
     title: d.title,
@@ -84,7 +85,7 @@ function dataParser(d) {
     screenshot: _gallery.filter(v => v).map(v => v.url),
     labels: d.labels,
     homepage: homepage,
-  };
+  }
 }
 
 class Case extends Component {
@@ -92,33 +93,34 @@ class Case extends Component {
     lightboxImages: [],
     photoIndex: 0,
     isOpen: false,
-  };
+  }
 
   async componentWillMount() {
     // get case
     try {
-      const res = await github.get(`/repos/axetroy/showcase/issues`);
-      const data = res.data || [];
-      const list = [];
+      const res = await github.get(`/repos/${owner}/showcase/issues`)
+      const data = res.data || []
+      const list = []
 
       while (data.length) {
         try {
-          const d = data.shift();
-          list.push(dataParser(d));
+          const d = data.shift()
+          list.push(dataParser(d))
         } catch (err) {
-          console.error(err);
+          console.error(err)
         }
       }
 
-      this.props.setShowCases(list);
+      this.props.setShowCases(list)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
   }
 
   render() {
-    const noScreenshotImg = 'https://user-images.githubusercontent.com/9758711/35052184-ec164078-fbe1-11e7-9e04-68509ebc9a34.jpg';
-    const { photoIndex, isOpen, lightboxImages } = this.state;
+    const noScreenshotImg =
+      'https://user-images.githubusercontent.com/9758711/35052184-ec164078-fbe1-11e7-9e04-68509ebc9a34.jpg'
+    const { photoIndex, isOpen, lightboxImages } = this.state
     return (
       <DocumentTitle title={['案例展示']}>
         <Spin spinning={false}>
@@ -129,8 +131,7 @@ class Case extends Component {
                   <a
                     href="javascript: void 0"
                     rel="noopener noreferrer"
-                    target="_blank"
-                  >
+                    target="_blank">
                     <Icon
                       type="code"
                       style={{
@@ -151,16 +152,14 @@ class Case extends Component {
                         md={8}
                         xs={24}
                         key={c.title}
-                        style={{ margin: '1rem 0' }}
-                      >
+                        style={{ margin: '1rem 0' }}>
                         <Card>
                           <div
                             style={{
                               position: 'relative',
                               overflow: 'hidden',
                               minHeight: '30rem',
-                            }}
-                          >
+                            }}>
                             <div
                               style={{
                                 backgroundImage: `url(${
@@ -195,8 +194,7 @@ class Case extends Component {
                                 backgroundColor: '#FAFAFA',
                                 padding: '1rem',
                                 width: '100%',
-                              }}
-                            >
+                              }}>
                               <h3>
                                 {c.homepage ? (
                                   <a href={c.homepage} target="_blank">
@@ -208,7 +206,7 @@ class Case extends Component {
                               </h3>
                               <div>
                                 {c.description.split('\n').map(line => {
-                                  return <p key={line}>{line}</p>;
+                                  return <p key={line}>{line}</p>
                                 })}
                               </div>
                               <div>
@@ -216,18 +214,17 @@ class Case extends Component {
                                   return (
                                     <Tag
                                       key={label.id}
-                                      color={'#' + label.color}
-                                    >
+                                      color={'#' + label.color}>
                                       {label.name}
                                     </Tag>
-                                  );
+                                  )
                                 })}
                               </div>
                             </div>
                           </div>
                         </Card>
                       </Col>
-                    );
+                    )
                   })}
                 </Row>
               </div>
@@ -264,12 +261,12 @@ class Case extends Component {
           </div>
         </Spin>
       </DocumentTitle>
-    );
+    )
   }
 }
 export default connect(
   function mapStateToProps(state) {
-    return { SHOW_CASES: state.SHOW_CASES || [] };
+    return { SHOW_CASES: state.SHOW_CASES || [] }
   },
   function mapDispatchToProps(dispatch) {
     return bindActionCreators(
@@ -277,6 +274,6 @@ export default connect(
         setShowCases: showCaseAction.set,
       },
       dispatch
-    );
+    )
   }
-)(withRouter(Case));
+)(withRouter(Case))
