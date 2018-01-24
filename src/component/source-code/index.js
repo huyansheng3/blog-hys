@@ -6,11 +6,12 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Spin } from 'antd'
 import axios from 'axios'
+import ContentLoader from 'react-content-loader'
 
 import CONFIG from '../../config.json'
 import github from '../../lib/github'
 
-const { owner } = CONFIG
+const { owner, repo } = CONFIG
 class SourceCode extends Component {
   state = {
     source: null,
@@ -56,15 +57,14 @@ ${raw}
   }
 
   render() {
-    const source = this.state.source
     return (
-      <Spin spinning={!source}>
-        {source ? (
-          <div>
+      <div>
+        {this.state.html ? (
+          <div style={{ minHeight: '200px' }}>
             <h2>
               <a
                 href={
-                  `https://github.com/${owner}/blog/blob/master/` +
+                  `https://github.com/${owner}/${repo}/blob/master/` +
                   this.state.source.path
                 }
                 target="_blank">
@@ -80,9 +80,9 @@ ${raw}
             <pre>{this.state.source.raw}</pre>
           </div>
         ) : (
-          ''
+          <ContentLoader type="List" />
         )}
-      </Spin>
+      </div>
     )
   }
 }

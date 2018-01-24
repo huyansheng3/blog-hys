@@ -5,10 +5,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-
 import { Modal } from 'antd'
-
 import SourceCode from '../source-code'
+import './index.less'
 
 class ViewSourceCode extends Component {
   state = {

@@ -13,14 +13,13 @@ import GithubOrgs from '../../component/github-orgs'
 import GithubLang from '../../component/github-lang'
 import EditThisPage from 'src/shared/edit-this-page'
 import DocumentTitle from '../../component/document-title'
-
 import './index.css'
-
 import CONFIG from '../../config.json'
 
 class Github extends Component {
   state = {}
-  async componentWillMount() {
+
+  async componentDidMount() {
     const module = await import('@axetroy/react-github-calendar')
     this.setState({ GithubCalendar: module.default })
   }
@@ -39,7 +38,6 @@ class Github extends Component {
               <GithubCalendar
                 style={{
                   width: '100%',
-                  minWidth: '75rem',
                 }}
                 name={CONFIG.owner}
               />
