@@ -47,13 +47,15 @@ const GithubSvg = props => (
   </svg>
 )
 
+const { ga } = window
 class App extends Component {
   handleRouterChange = (location, action) => {
     // location is an object like window.location
-    window.ga('set', {
-      page: location.pathname,
-      title: document.title,
-    })
+    ga &&
+      ga('set', {
+        page: location.pathname,
+        title: document.title,
+      })
   }
 
   render() {

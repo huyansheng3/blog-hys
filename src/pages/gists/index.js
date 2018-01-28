@@ -13,8 +13,9 @@ import github from '../../lib/github'
 import graphql from '../../lib/graphql'
 import * as gistsAction from '../../redux/gists'
 import CONFIG from 'src/config.json'
+import EditThisPage from 'src/shared/edit-this-page'
 
-const { onwer } = CONFIG
+const { owner } = CONFIG
 
 class Gists extends Component {
   state = {
@@ -31,7 +32,7 @@ class Gists extends Component {
 
   async getAllGistList(page, per_page, gists = []) {
     try {
-      const { data } = await github.get(`/users/${onwer}/gists`, {
+      const { data } = await github.get(`/users/${owner}/gists`, {
         params: { page, per_page },
       })
       gists = gists.concat(data || [])
@@ -79,20 +80,7 @@ query{
     return (
       <DocumentTitle title={['Gist List']}>
         <div className="toolbar-container">
-          <div className="edit-this-page">
-            <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-              <ViewSourceCode file="pages/gists/index.js">
-                <a href="javascript: void 0" target="_blank">
-                  <Icon
-                    type="code"
-                    style={{
-                      fontSize: '3rem',
-                    }}
-                  />
-                </a>
-              </ViewSourceCode>
-            </Tooltip>
-          </div>
+          <EditThisPage sourcePage="pages/gists/index.js" />
           <div style={{ padding: '0 2.4rem' }}>
             <h2 style={{ textAlign: 'center' }}>代码片段</h2>
           </div>

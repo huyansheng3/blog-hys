@@ -76,6 +76,10 @@ class Header extends Component {
           min: 0.1,
           max: 1.5,
         })
+        rythm.addRythm('jumpClass', 'jump', 0, 10, {
+          min: 0,
+          max: 30,
+        })
         this.__bgmLoaded = true
       }
       rythm.start()
@@ -133,6 +137,7 @@ class Header extends Component {
                 width: '10rem',
                 borderRadius: '50%',
               }}
+              className="jumpClass"
               src={avator}
               alt=""
             />
