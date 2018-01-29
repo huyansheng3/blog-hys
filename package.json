@@ -107,7 +107,7 @@
       "node scripts/now.js && node scripts/build.js && rm -r server/static && cp -r build/  server/",
     "test": "node scripts/test.js --env=jsdom",
     "deploy":
-      "gh-pages --repo git@github.com:axetroy/axetroy.github.io.git --branch master -d build",
+      "gh-pages --repo git@github.com:huyansheng3/huyansheng3.github.io.git --branch master -d build",
     "generate": "./node_modules/.bin/all-contributors generate",
     "flow": "flow",
     "format": "npm run format:js && npm run format:css && npm run format:json",
