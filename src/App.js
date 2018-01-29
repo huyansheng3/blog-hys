@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Route, Switch, HashRouter } from 'react-router-dom'
+import { Route, Switch, BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-
 import { Row, Col, Card, notification } from 'antd'
 
 import Footer from './component/footer'
@@ -68,7 +67,7 @@ class App extends Component {
     }
     return (
       <Provider store={store}>
-        <HashRouter>
+        <BrowserRouter>
           <ClickMaterialWithStatRouterListener
             onRouterChange={this.handleRouterChange}>
             <Row>
@@ -173,7 +172,7 @@ class App extends Component {
               </Col>
             </Row>
           </ClickMaterialWithStatRouterListener>
-        </HashRouter>
+        </BrowserRouter>
       </Provider>
     )
   }
