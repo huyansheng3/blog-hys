@@ -1,0 +1,55 @@
+@gray-darker: lighten(#000, 13.5%); // #222
+@gray-dark: lighten(#000, 20%); // #333
+@gray: lighten(#000, 33.5%); // #555
+@gray-light: lighten(#000, 46.7%); // #777
+@gray-lighter: lighten(#000, 93.5%); // #eee
+@white: #fff;
+
+html,
+body {
+  background-color: @gray-lighter;
+  font-family: serif sans-serif;
+}
+
+.resume {
+}
+
+.header {
+  background: @gray-dark;
+  padding: 20px 30px;
+  color: @white;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: @white;
+  }
+  .header__wechat {
+    height: 100px;
+  }
+  .header__contract {
+    display: inline-block;
+  }
+  .head__info {
+    text-align: right;
+  }
+}
+
+.content {
+  margin-top: 20px;
+}
+
+// Medium devices (tablets, 768px and up)
+@media (max-width: 768px) {
+  .header {
+    text-align: center;
+    .header__wechat,
+    .header__contract {
+      margin-bottom: 20px;
+    }
+    .head__info {
+      text-align: center;
+    }
+  }
+}
