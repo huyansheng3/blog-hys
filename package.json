@@ -52,6 +52,7 @@
     "rythm.js": "^2.2.2"
   },
   "devDependencies": {
+    "@axetroy/walk": "^0.1.0",
     "autoprefixer": "^7.2.5",
     "babel-core": "6.26.0",
     "babel-eslint": "^8.2.1",
@@ -101,24 +102,24 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "start":
-      "node scripts/now.js && cross-env PORT=10086 node scripts/start.js",
-    "build":
-      "node scripts/now.js && node scripts/build.js && rm -r server/static && cp -r build/  server/",
+    "start": "node scripts/now.js && cross-env PORT=10086 node scripts/start.js",
+    "build": "node scripts/now.js && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "deploy":
-      "gh-pages --repo git@github.com:huyansheng3/huyansheng3.github.io.git --branch master -d build",
+    "deploy": "node scripts/rm-map.js && gh-pages --repo https://github.com/huyansheng3/huyansheng3.github.io.git --branch master -d build",
     "generate": "./node_modules/.bin/all-contributors generate",
     "flow": "flow",
     "format": "npm run format:js && npm run format:css && npm run format:json",
-    "format:js":
-      "prettier --single-quote --trailing-comma es5 --write '{src,app,__{tests,mocks}__}/**/*.js'",
+    "format:js": "prettier --single-quote --trailing-comma es5 --write '{src,app,__{tests,mocks}__}/**/*.js'",
     "format:css": "prettier --single-quote --write '{src,app}/**/*.css'",
     "format:json": "prettier --single-quote --write '{src,app}/**/*.json'"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
-    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,mjs}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
@@ -128,10 +129,11 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
-        "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
@@ -146,7 +148,9 @@
     ]
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
