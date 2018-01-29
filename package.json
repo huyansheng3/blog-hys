@@ -153,6 +153,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "plugins": ["flowtype"]
   }
 }
