@@ -20,6 +20,7 @@
 - [x] 数据持久化
 - [x] 按需加载
 - [x] 静态类型检查
+- [x] gh-pages history 路由
 - [ ] i18n
 - [x] 分析Github相关数据
 - [x] 集成[FireBase](https://firebase.google.com/)
