@@ -13,6 +13,7 @@ import CONFIG from 'src/config.json'
 import DocumentTitle from '../../component/document-title'
 import ViewSourceCode from '../../component/view-source-code'
 import * as showCaseAction from '../../redux/showcases'
+import EditThisPage from 'src/shared/edit-this-page'
 
 const { owner } = CONFIG
 
@@ -125,23 +126,7 @@ class Case extends Component {
       <DocumentTitle title={['案例展示']}>
         <Spin spinning={false}>
           <div className="toolbar-container">
-            <div className="edit-this-page">
-              <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-                <ViewSourceCode file="pages/case/index.js">
-                  <a
-                    href="javascript: void 0"
-                    rel="noopener noreferrer"
-                    target="_blank">
-                    <Icon
-                      type="code"
-                      style={{
-                        fontSize: '3rem',
-                      }}
-                    />
-                  </a>
-                </ViewSourceCode>
-              </Tooltip>
-            </div>
+            <EditThisPage sourcePage="pages/case/index.js" />
             <LazyLoad height={300} offset={100}>
               <div>
                 <h2 style={{ textAlign: 'center' }}>案例展示</h2>

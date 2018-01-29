@@ -9,7 +9,7 @@ import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import queryString from 'query-string'
 import LazyLoad from 'react-lazyload'
-
+import EditThisPage from 'src/shared/edit-this-page'
 import DocumentTitle from '../../component/document-title'
 import ViewSourceCode from '../../component/view-source-code'
 import github from '../../lib/github'
@@ -106,20 +106,7 @@ class Posts extends Component {
       <DocumentTitle title={['博客文章']}>
         <Spin spinning={false}>
           <div className={'toolbar-container'}>
-            <div className="edit-this-page">
-              <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-                <a href="javascript: void 0" target="_blank">
-                  <ViewSourceCode file="pages/posts/index.js">
-                    <Icon
-                      type="code"
-                      style={{
-                        fontSize: '3rem',
-                      }}
-                    />
-                  </ViewSourceCode>
-                </a>
-              </Tooltip>
-            </div>
+            <EditThisPage sourcePage="pages/posts/index.js" />
             {this.props.POSTS.map((post, i) => {
               return (
                 <Card
