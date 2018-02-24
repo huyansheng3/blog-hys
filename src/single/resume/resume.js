@@ -14,4 +14,8 @@ export default {
     time: '2011 ~ 2015',
     award: '2012 ~ 2013 学校三等奖学金',
   },
+  language: {},
+  project: {},
+  fe: {},
+  backend: {},
 }

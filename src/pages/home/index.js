@@ -10,7 +10,8 @@ import { Spin, Icon, Tooltip } from 'antd'
 import CONFIG from '../../config.json'
 import github from '../../lib/github'
 import { store } from '../../redux/readme'
-
+import Logo from 'src/shared/logo'
+import EditThisPage from 'src/shared/edit-this-page'
 import DocumentTitle from '../../component/document-title'
 import ViewSourceCode from '../../component/view-source-code'
 
@@ -51,35 +52,15 @@ class Home extends Component {
       <DocumentTitle title={['Home']}>
         <Spin spinning={!this.props.READ_ME}>
           <div className="toolbar-container">
-            <div className="edit-this-page">
-              <Tooltip placement="topLeft" title="编辑此页" arrowPointAtCenter>
-                <a
-                  href={`https://github.com/${CONFIG.owner}/${
-                    CONFIG.repo
-                  }/edit/master/README.md`}
-                  target="_blank">
-                  <Icon
-                    type="edit"
-                    style={{
-                      fontSize: '3rem',
-                    }}
-                  />
-                </a>
-              </Tooltip>
+            <EditThisPage
+              sourcePage="pages/home/index.js"
+              showEdit
+              editPage={`https://github.com/${CONFIG.owner}/${
+                CONFIG.repo
+              }/edit/master/README.md`}
+            />
 
-              <Tooltip placement="topLeft" title="查看源码" arrowPointAtCenter>
-                <a href="javascript: void 0">
-                  <ViewSourceCode file="pages/home/index.js">
-                    <Icon
-                      type="code"
-                      style={{
-                        fontSize: '3rem',
-                      }}
-                    />
-                  </ViewSourceCode>
-                </a>
-              </Tooltip>
-            </div>
+            <Logo />
             <div
               className="markdown-body"
               dangerouslySetInnerHTML={{
