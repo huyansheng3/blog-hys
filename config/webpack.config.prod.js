@@ -313,6 +313,10 @@ const webpackConfig = {
               })
             ),
           },
+          // loader for phaser
+          { test: [/\.vert$/, /\.frag$/], use: ['raw-loader'] },
+          { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
+
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader doesn't use a "test" so it will catch all modules
@@ -346,6 +350,11 @@ const webpackConfig = {
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
+    // define for phaser
+    new webpack.DefinePlugin({
+      WEBGL_RENDERER: true,
+      CANVAS_RENDERER: true,
+    }),
     // Minify the code.
     new webpack.optimize.UglifyJsPlugin({
       compress: {

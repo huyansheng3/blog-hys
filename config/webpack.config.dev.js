@@ -12,11 +12,34 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const getClientEnvironment = require('./env')
 const paths = require('./paths')
 
+const target = process.env.npm_config_target
+console.log('target', target)
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
 function setupSingles() {
+  const targetKeys = Object.keys(paths.singles)
+  if (target && targetKeys.indexOf(target) !== -1) {
+    return {
+      entry: {
+        [target]: [
+          require.resolve('./polyfills'),
+          require.resolve('react-dev-utils/webpackHotDevClient'),
+          paths.singles[target],
+        ],
+      },
+      plugins: [
+        new HtmlWebpackPlugin({
+          chunks: [target],
+          inject: true,
+          template: paths.appHtml,
+          filename: `${target}.html`,
+        }),
+      ],
+    }
+  }
+
   const entry = {
     index: [
       require.resolve('./polyfills'),
@@ -24,6 +47,7 @@ function setupSingles() {
       paths.appIndexJs,
     ],
   }
+
   const plugins = [
     new HtmlWebpackPlugin({
       chunks: ['index'],
@@ -33,7 +57,7 @@ function setupSingles() {
     }),
   ]
 
-  Object.keys(paths.singles).forEach(key => {
+  targetKeys.forEach(key => {
     entry[key] = [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
@@ -49,11 +73,13 @@ function setupSingles() {
 
     plugins.push(newPlugins)
   })
+
   return { entry, plugins }
 }
 
 const singles = setupSingles()
 
+console.log(singles)
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/'
@@ -249,6 +275,9 @@ let webpackConfig = {
               { loader: 'less-loader' },
             ],
           },
+          // loader for phaser
+          { test: [/\.vert$/, /\.frag$/], use: ['raw-loader'] },
+          { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.
@@ -282,6 +311,11 @@ let webpackConfig = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env.stringified),
+    // define for phaser
+    new webpack.DefinePlugin({
+      WEBGL_RENDERER: true,
+      CANVAS_RENDERER: true,
+    }),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
