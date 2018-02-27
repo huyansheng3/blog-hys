@@ -3,6 +3,7 @@ import BootScene from './boot'
 import PreloadScene from './preload'
 import MenuScene from './menu'
 import PlayScene from './play'
+import './index.less'
 
 const config = {
   type: Phaser.AUTO,

@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 
-let loading
 export default class BootScene extends Phaser.Scene {
   constructor() {
     super({
@@ -12,7 +11,7 @@ export default class BootScene extends Phaser.Scene {
   }
   create() {
     const height = this.sys.game.config.height
-    loading = this.add.image(0, height / 2, 'loading').setOrigin(0, 0.5)
+    this.loading = this.add.image(0, height / 2, 'loading').setOrigin(0, 0.5)
     // window.onresize = () => {
     //   this.sys.game.renderer.resize(window.innerWidth, window.innerHeight, 1.0)
     // }
@@ -21,6 +20,6 @@ export default class BootScene extends Phaser.Scene {
   }
 
   update() {
-    loading.width += 60
+    this.loading.width += 60
   }
 }
