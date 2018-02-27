@@ -4,11 +4,10 @@ import PreloadScene from './preload'
 import MenuScene from './menu'
 import PlayScene from './play'
 
-console.log(Phaser)
 const config = {
   type: Phaser.AUTO,
-  width: 400,
-  height: 240,
+  width: 320,
+  height: 505,
   scene: [BootScene, PreloadScene, MenuScene, PlayScene],
 }
 
@@ -26,37 +25,6 @@ let game = new Phaser.Game(config) //实例化game
 //   }
 //   this.create = function() {
 //     game.state.start('preload') //跳转到资源加载页面
-//   }
-// }
-
-// function preload() {
-//   this.preload = function() {
-//     var preloadSprite = game.add.sprite(35, game.height / 2, 'loading') //创建显示loading进度的sprite
-//     game.load.setPreloadSprite(preloadSprite)
-//     //以下为要加载的资源
-//     game.load.image('background', require('./assets/background.png')) //背景
-//     game.load.image('ground', require('./assets/ground.png')) //地面
-//     game.load.image('title', require('./assets/title.png')) //游戏标题
-//     game.load.spritesheet('bird', require('./assets/bird.png'), 34, 24, 3) //鸟
-//     game.load.image('btn', require('./assets/start-button.png')) //按钮
-//     game.load.spritesheet('pipe', require('./assets/pipes.png'), 54, 320, 2) //管道
-//     game.load.bitmapFont(
-//       'flappy_font',
-//       require('./assets/fonts/flappyfont/flappyfont.png'),
-//       require('./assets/fonts/flappyfont/flappyfont.fnt')
-//     )
-//     game.load.audio('fly_sound', require('./assets/flap.wav')) //飞翔的音效
-//     game.load.audio('score_sound', require('./assets/score.wav')) //得分的音效
-//     game.load.audio('hit_pipe_sound', require('./assets/pipe-hit.wav')) //撞击管道的音效
-//     game.load.audio('hit_ground_sound', require('./assets/ouch.wav')) //撞击地面的音效
-
-//     game.load.image('ready_text', require('./assets/get-ready.png'))
-//     game.load.image('play_tip', require('./assets/instructions.png'))
-//     game.load.image('game_over', require('./assets/gameover.png'))
-//     game.load.image('score_board', require('./assets/scoreboard.png'))
-//   }
-//   this.create = function() {
-//     game.state.start('menu')
 //   }
 // }
 
