@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 
-let titleGroup
+let background, ground
+
 export default class MenuScene extends Phaser.Scene {
   constructor() {
     super({
@@ -11,12 +12,12 @@ export default class MenuScene extends Phaser.Scene {
   create() {
     const width = this.sys.game.config.width
     const height = this.sys.game.config.height
-    this.add.tileSprite(0, 0, width * 2, height * 2, 'background') //背景图
-    this.add.tileSprite(0, height - 56, width * 2, 112, 'ground') //地板
+    background = this.add.tileSprite(0, 0, width * 2, height * 2, 'background') //背景图
+    ground = this.add.tileSprite(0, height - 56, width * 2, 112, 'ground') //地板
 
-    titleGroup = this.add.group() //创建存放标题的组
+    const titleGroup = this.add.group() //创建存放标题的组
     const title = this.add.image(width / 2, 100, 'title')
-    const bird = this.add.sprite(width - 30, 100, 'bird')
+    const bird = this.add.sprite(width - 40, 100, 'bird')
     titleGroup.add(title)
     titleGroup.add(bird)
 
@@ -45,5 +46,12 @@ export default class MenuScene extends Phaser.Scene {
     btn.on('pointerdown', pointer => {
       this.scene.start('PlayScene')
     })
+
+    this.scene.start('PlayScene')
+  }
+
+  update(time, delta) {
+    background.tilePositionX += 0.2
+    ground.tilePositionX += 2
   }
 }

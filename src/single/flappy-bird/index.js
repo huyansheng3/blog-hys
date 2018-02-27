@@ -8,6 +8,12 @@ const config = {
   type: Phaser.AUTO,
   width: 320,
   height: 505,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: true,
+    },
+  },
   scene: [BootScene, PreloadScene, MenuScene, PlayScene],
 }
 

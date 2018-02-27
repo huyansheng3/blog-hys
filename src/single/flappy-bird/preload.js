@@ -8,14 +8,6 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    console.log('PreloadScene preload')
-    const preloadSprite = this.add.sprite(
-      35,
-      this.sys.game.config.height / 2,
-      'loading'
-    )
-    // this.load.setPreloadSprite(preloadSprite)
-
     //以下为要加载的资源
     this.load.image('background', require('./assets/background.png')) //背景
     this.load.image('ground', require('./assets/ground.png')) //地面
@@ -47,7 +39,6 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    console.log('PreloadScene create')
     this.scene.start('MenuScene')
   }
 }
