@@ -15,8 +15,32 @@ export default class PlayScene extends Phaser.Scene {
       .tileSprite(0, 0, width * 2, width * 2, 'background')
       .setOrigin(0, 0) //背景图
     this.ground = this.add.tileSprite(0, height - 56, width * 2, 112, 'ground') //地板
-    this.pipeGroup = this.add.group()
-    this.pipeGroup.enableBody = true
+
+    this.pipeGroup = this.physics.add.group([
+      {
+        key: 'pipe',
+        frame: 0,
+        frameQuantity: 3,
+        immovable: true,
+        setXY: {
+          x: 100,
+          y: 0,
+          stepX: 100,
+        },
+      },
+      {
+        key: 'pipe',
+        frame: 1,
+        frameQuantity: 3,
+        immovable: true,
+        setXY: {
+          x: 100,
+          y: height,
+          stepX: 100,
+        },
+      },
+    ])
+
     this.bird = this.physics.add.sprite(60, 150, 'bird')
     this.bird.anims.play('fly')
 
@@ -48,53 +72,63 @@ export default class PlayScene extends Phaser.Scene {
     this.readyText.destroy()
     this.playTip.destroy()
     this.input.on('pointerdown', this.fly, this)
-    this.timedEvent = this.time.addEvent({
-      delay: 900,
-      callback: this.generatePipes,
-      callbackScope: this,
-      loop: true,
-    })
+    // this.timedEvent = this.time.addEvent({
+    //   delay: 3900,
+    //   callback: this.stopGame,
+    //   callbackScope: this,
+    //   loop: true,
+    // })
   }
 
   stopGame() {
+    // this.pipeGroup.forEachExists(function(pipe) {
+    //       pipe.body.velocity.x = 0
+    //     }, this)
+    this.hasStarted = false
     this.timedEvent.remove(false)
+    this.bird.anims.stop('fly')
+    this.input.off('pointerdown', this.fly, this)
   }
 
   update() {
     if (!this.hasStarted) return //游戏未开始
     this.background.tilePositionX += 0.2
     this.ground.tilePositionX += 2
+
+    if (this.bird.angle < 90) this.bird.angle += 2.5 //下降时头朝下
+
+    this.physics.world.collide(this.bird, this.pipeGroup)
   }
 
-  generatePipes(gap) {
-    //     //制造管道
-    //     gap = gap || 100 //上下管道之间的间隙宽度
-    //     var position =
-    //       505 -
-    //       320 -
-    //       gap +
-    //       Math.floor((505 - 112 - 30 - gap - 505 + 320 + gap) * Math.random())
-    //     var topPipeY = position - 360
-    //     var bottomPipeY = position + gap
-    //     if (this.resetPipe(topPipeY, bottomPipeY)) return
-    //     var topPipe = game.add.sprite(
-    //       game.width,
-    //       topPipeY,
-    //       'pipe',
-    //       0,
-    //       this.pipeGroup
-    //     )
-    //     var bottomPipe = game.add.sprite(
-    //       game.width,
-    //       bottomPipeY,
-    //       'pipe',
-    //       1,
-    //       this.pipeGroup
-    //     )
-    //     this.pipeGroup.setAll('checkWorldBounds', true)
-    //     this.pipeGroup.setAll('outOfBoundsKill', true)
-    //     this.pipeGroup.setAll('body.velocity.x', -this.gameSpeed)
-  }
+  // generatePipes(gap) {
+  //   //制造管道
+  //   gap = gap || 100 //上下管道之间的间隙宽度
+  //   var position =
+  //     505 -
+  //     320 -
+  //     gap +
+  //     Math.floor((505 - 112 - 30 - gap - 505 + 320 + gap) * Math.random())
+  //   var topPipeY = position - 360
+  //   var bottomPipeY = position + gap
+  //   if (this.resetPipe(topPipeY, bottomPipeY)) return
+  //   var topPipe = this.add.sprite(
+  //     this.width,
+  //     topPipeY,
+  //     'pipe',
+  //     0,
+  //     this.pipeGroup
+  //   )
+  //   var bottomPipe = this.add.sprite(
+  //     this.width,
+  //     bottomPipeY,
+  //     'pipe',
+  //     1,
+  //     this.pipeGroup
+  //   )
+
+  // ]);
+
+  // }
 
   resetPipe(topPipeY, bottomPipeY) {
     //重置出了边界的管道，做到回收利用
@@ -114,8 +148,14 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   fly() {
-    this.bird.setGravityY(this.bird.body.gravity.y - 350)
-    // this.add.tween(this.bird).to({ angle: -30 }, 100, null, true, 0, 0, false) //上升时头朝上
+    // 飞行增加向上的加速度
+    this.bird.setVelocityY(-350)
+    this.tweens.add({
+      targets: this.bird,
+      angle: -30,
+      duration: 100,
+      repeat: 1,
+    })
     this.soundFly.play()
   }
 
@@ -198,12 +238,6 @@ export default class PlayScene extends Phaser.Scene {
 //     this.bird.animations.stop('fly', 0)
 //     game.input.onDown.remove(this.fly, this)
 //     game.time.events.stop(true)
-//   }
-
-//   this.fly = function() {
-//     this.bird.body.velocity.y = -350
-//     game.add.tween(this.bird).to({ angle: -30 }, 100, null, true, 0, 0, false) //上升时头朝上
-//     this.soundFly.play()
 //   }
 
 //   this.hitPipe = function() {

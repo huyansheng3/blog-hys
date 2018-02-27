@@ -17,8 +17,6 @@ export default class BootScene extends Phaser.Scene {
     //   this.sys.game.renderer.resize(window.innerWidth, window.innerHeight, 1.0)
     // }
 
-    console.log(loading)
-
     this.scene.start('PreloadScene')
   }
 
