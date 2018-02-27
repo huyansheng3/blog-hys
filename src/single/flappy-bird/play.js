@@ -25,7 +25,7 @@ export default class PlayScene extends Phaser.Scene {
         setXY: {
           x: 100,
           y: 0,
-          stepX: 100,
+          stepX: 50,
         },
       },
       {
@@ -36,10 +36,12 @@ export default class PlayScene extends Phaser.Scene {
         setXY: {
           x: 100,
           y: height,
-          stepX: 100,
+          stepX: 50,
         },
       },
     ])
+
+    console.log(this.pipeGroup)
 
     this.bird = this.physics.add.sprite(60, 150, 'bird')
     this.bird.anims.play('fly')
@@ -97,7 +99,7 @@ export default class PlayScene extends Phaser.Scene {
 
     if (this.bird.angle < 90) this.bird.angle += 2.5 //下降时头朝下
 
-    this.physics.world.collide(this.bird, this.pipeGroup)
+    // this.physics.world.collide(this.bird, this.pipeGroup)
   }
 
   // generatePipes(gap) {
