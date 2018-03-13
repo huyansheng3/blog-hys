@@ -48,6 +48,8 @@ export default class PlayScene extends Phaser.Scene {
 
     this.bird.setCollideWorldBounds(true).setGravityY(0)
 
+    this.physics.world.enable([this.ground, this.bird])
+
     // this.physics.enable(this.bird, Phaser.Physics.ARCADE) //开启鸟的物理系统
     // this.bird.body.gravity.y = 0 //鸟的重力,未开始游戏，先先让他不动
     // this.physics.enable(this.ground, Phaser.Physics.ARCADE) //地面
@@ -99,7 +101,7 @@ export default class PlayScene extends Phaser.Scene {
 
     if (this.bird.angle < 90) this.bird.angle += 2.5 //下降时头朝下
 
-    // this.physics.world.collide(this.bird, this.pipeGroup)
+    this.physics.world.collide(this.bird, this.ground)
   }
 
   // generatePipes(gap) {
