@@ -110,9 +110,14 @@ function renderComments(
               ? ` • <span title="comment was edited at ${updateDate}">edited</span>`
               : ''
           }
-          <div class="gitment-comment-like-btn">${heartIcon} ${(comment.reactions &&
-      comment.reactions.heart) ||
-      ''}</div>
+          ${
+            comment.reactions
+              ? `<div class="gitment-comment-like-btn">
+              ${heartIcon} ${(comment.reactions && comment.reactions.heart) ||
+                  ''}
+            </div>`
+              : ''
+          }
         </div>
         <div class="gitment-comment-body gitment-markdown">${
           comment.body_html
@@ -126,12 +131,14 @@ function renderComments(
         reaction =>
           reaction.content === 'heart' && reaction.user.login === user.login
       )
-    if (likedReaction) {
-      likeButton.classList.add('liked')
-      likeButton.onclick = () => instance.unlikeAComment(comment.id)
-    } else {
-      likeButton.classList.remove('liked')
-      likeButton.onclick = () => instance.likeAComment(comment.id)
+    if (likeButton) {
+      if (likedReaction) {
+        likeButton.classList.add('liked')
+        likeButton.onclick = () => instance.unlikeAComment(comment.id)
+      } else {
+        likeButton.classList.remove('liked')
+        likeButton.onclick = () => instance.likeAComment(comment.id)
+      }
     }
 
     // dirty

@@ -143,13 +143,19 @@ export default class Gitment {
   }
 
   update() {
+    const { type } = this
+    let load = []
+    if (type === 'gists') {
+      load = [this.loadComments().then(() => this.loadCommentReactions())]
+    } else {
+      load = [
+        this.loadComments().then(() => this.loadCommentReactions()),
+        this.loadReactions(),
+      ]
+    }
+
     return Promise.all([this.loadMeta(), this.loadUserInfo()])
-      .then(() =>
-        Promise.all([
-          this.loadComments().then(() => this.loadCommentReactions()),
-          this.loadReactions(),
-        ])
-      )
+      .then(() => Promise.all(load))
       .catch(e => (this.state.error = e))
   }
 
