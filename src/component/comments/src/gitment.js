@@ -181,9 +181,9 @@ export default class Gitment {
 
   loadMeta() {
     const { id, owner, repo, gistId, type = 'issues' } = this
-    if (type === 'gist') {
+    if (type === 'gists') {
       return http
-        .get(`/repos/${owner}/${repo}/${type}/${gistId}`, {
+        .get(`/${type}/${gistId}`, {
           creator: owner,
         })
         .then(issue => {

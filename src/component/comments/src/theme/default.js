@@ -5,7 +5,7 @@ import {
 } from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
-function renderHeader({ meta, user, reactions }, instance) {
+function renderHeader({ meta, user, reactions = {} }, instance) {
   const container = document.createElement('div')
   container.lang = 'en-US'
   container.className = 'gitment-container gitment-header-container'
@@ -52,7 +52,7 @@ function renderHeader({ meta, user, reactions }, instance) {
 }
 
 function renderComments(
-  { meta, comments, commentReactions, currentPage, user, error },
+  { meta, comments, commentReactions = {}, currentPage, user, error },
   instance
 ) {
   const container = document.createElement('div')
@@ -110,8 +110,9 @@ function renderComments(
               ? ` • <span title="comment was edited at ${updateDate}">edited</span>`
               : ''
           }
-          <div class="gitment-comment-like-btn">${heartIcon} ${comment.reactions
-      .heart || ''}</div>
+          <div class="gitment-comment-like-btn">${heartIcon} ${(comment.reactions &&
+      comment.reactions.heart) ||
+      ''}</div>
         </div>
         <div class="gitment-comment-body gitment-markdown">${
           comment.body_html
