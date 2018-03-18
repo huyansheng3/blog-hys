@@ -8,8 +8,8 @@ import moment from 'moment'
 
 import github from '../../lib/github'
 
-import 'gitment/style/default.css'
-import Gitment from 'gitment'
+import './style/default.css'
+import Gitment from './src/gitment'
 
 @lazyload({
   height: 200,
@@ -36,6 +36,7 @@ class Comments extends Component {
         client_secret: 'ed237189ab173a7ffd9d6448536c82ee69bb1293',
       },
     })
+
     gitment.render('comments')
   }
 }
