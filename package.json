@@ -29,6 +29,7 @@
     "fastclick": "^1.0.6",
     "firebase": "^4.8.2",
     "github-markdown-css": "^2.10.0",
+    "gitment": "0.0.3",
     "localforage": "^1.5.5",
     "lodash": "^4.17.4",
     "lodash.debounce": "^4.0.8",
