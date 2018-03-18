@@ -21,4 +21,4 @@ onStoreDone(function() {
   )
 })
 
-// registerServiceWorker()
+registerServiceWorker()

@@ -19,7 +19,7 @@ import firebase from '../../lib/firebase'
 class Footer extends Component {
   state = {
     totalVisited: 0,
-    created: new Date('2018-01-20 11:52:00'),
+    created: new Date('2018/01/20 11:52:00'),
   }
 
   componentDidMount() {
