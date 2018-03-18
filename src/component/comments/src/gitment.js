@@ -1,10 +1,6 @@
 import { autorun, observable } from 'mobx'
 
-import {
-  LS_ACCESS_TOKEN_KEY,
-  LS_USER_KEY,
-  NOT_INITIALIZED_ERROR,
-} from './constants'
+import { LS_ACCESS_TOKEN_KEY, LS_USER_KEY } from './constants'
 import { getTargetContainer, http, Query } from './utils'
 import defaultTheme from './theme/default'
 
@@ -139,15 +135,6 @@ export default class Gitment {
     }
   }
 
-  init() {
-    return this.createIssue()
-      .then(() => this.loadComments())
-      .then(comments => {
-        this.state.error = null
-        return comments
-      })
-  }
-
   useTheme(theme = {}) {
     this.theme = theme
 
@@ -173,20 +160,6 @@ export default class Gitment {
     })
   }
 
-  createIssue() {
-    const { id, owner, repo, title, link, desc, labels } = this
-
-    return http
-      .post(`/repos/${owner}/${repo}/issues`, {
-        title,
-        body: `${link}\n\n${desc}`,
-      })
-      .then(meta => {
-        this.state.meta = meta
-        return meta
-      })
-  }
-
   getIssue() {
     if (this.state.meta.id) return Promise.resolve(this.state.meta)
 
@@ -207,16 +180,26 @@ export default class Gitment {
   }
 
   loadMeta() {
-    const { id, owner, repo } = this
-    return http
-      .get(`/repos/${owner}/${repo}/issues`, {
-        creator: owner,
-      })
-      .then(issues => {
-        if (!issues.length) return Promise.reject(NOT_INITIALIZED_ERROR)
-        this.state.meta = issues[0]
-        return issues[0]
-      })
+    const { id, owner, repo, gistId, type = 'issues' } = this
+    if (type === 'gist') {
+      return http
+        .get(`/repos/${owner}/${repo}/${type}/${gistId}`, {
+          creator: owner,
+        })
+        .then(issue => {
+          this.state.meta = issue
+          return issue
+        })
+    } else {
+      return http
+        .get(`/repos/${owner}/${repo}/${type}/${id}`, {
+          creator: owner,
+        })
+        .then(issue => {
+          this.state.meta = issue
+          return issue
+        })
+    }
   }
 
   loadComments(page = this.state.currentPage) {

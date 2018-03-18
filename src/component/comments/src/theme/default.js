@@ -1,25 +1,28 @@
-import { github as githubIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
+import {
+  github as githubIcon,
+  heart as heartIcon,
+  spinner as spinnerIcon,
+} from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
 function renderHeader({ meta, user, reactions }, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = 'en-US'
   container.className = 'gitment-container gitment-header-container'
 
   const likeButton = document.createElement('span')
-  const likedReaction = reactions.find(reaction => (
-    reaction.content === 'heart' && reaction.user.login === user.login
-  ))
+  const likedReaction = reactions.find(
+    reaction =>
+      reaction.content === 'heart' && reaction.user.login === user.login
+  )
   likeButton.className = 'gitment-header-like-btn'
   likeButton.innerHTML = `
     ${heartIcon}
-    ${ likedReaction
-      ? 'Unlike'
-      : 'Like'
-    }
-    ${ meta.reactions && meta.reactions.heart
-      ? ` • <strong>${meta.reactions.heart}</strong> Liked`
-      : ''
+    ${likedReaction ? 'Unlike' : 'Like'}
+    ${
+      meta.reactions && meta.reactions.heart
+        ? ` • <strong>${meta.reactions.heart}</strong> Liked`
+        : ''
     }
   `
 
@@ -34,10 +37,7 @@ function renderHeader({ meta, user, reactions }, instance) {
 
   const commentsCount = document.createElement('span')
   commentsCount.innerHTML = `
-    ${ meta.comments
-    ? ` • <strong>${meta.comments}</strong> Comments`
-    : ''
-    }
+    ${meta.comments ? ` • <strong>${meta.comments}</strong> Comments` : ''}
   `
   container.appendChild(commentsCount)
 
@@ -51,35 +51,19 @@ function renderHeader({ meta, user, reactions }, instance) {
   return container
 }
 
-function renderComments({ meta, comments, commentReactions, currentPage, user, error }, instance) {
+function renderComments(
+  { meta, comments, commentReactions, currentPage, user, error },
+  instance
+) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = 'en-US'
   container.className = 'gitment-container gitment-comments-container'
 
   if (error) {
     const errorBlock = document.createElement('div')
     errorBlock.className = 'gitment-comments-error'
 
-    if (error === NOT_INITIALIZED_ERROR
-      && user.login
-      && user.login.toLowerCase() === instance.owner.toLowerCase()) {
-      const initHint = document.createElement('div')
-      const initButton = document.createElement('button')
-      initButton.className = 'gitment-comments-init-btn'
-      initButton.onclick = () => {
-        initButton.setAttribute('disabled', true)
-        instance.init()
-          .catch(e => {
-            initButton.removeAttribute('disabled')
-            alert(e)
-          })
-      }
-      initButton.innerText = 'Initialize Comments'
-      initHint.appendChild(initButton)
-      errorBlock.appendChild(initHint)
-    } else {
-      errorBlock.innerText = error
-    }
+    errorBlock.innerText = error
     container.appendChild(errorBlock)
     return container
   } else if (comments === undefined) {
@@ -105,30 +89,42 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
     const commentItem = document.createElement('li')
     commentItem.className = 'gitment-comment'
     commentItem.innerHTML = `
-      <a class="gitment-comment-avatar" href="${comment.user.html_url}" target="_blank">
-        <img class="gitment-comment-avatar-img" src="${comment.user.avatar_url}"/>
+      <a class="gitment-comment-avatar" href="${
+        comment.user.html_url
+      }" target="_blank">
+        <img class="gitment-comment-avatar-img" src="${
+          comment.user.avatar_url
+        }"/>
       </a>
       <div class="gitment-comment-main">
         <div class="gitment-comment-header">
-          <a class="gitment-comment-name" href="${comment.user.html_url}" target="_blank">
+          <a class="gitment-comment-name" href="${
+            comment.user.html_url
+          }" target="_blank">
             ${comment.user.login}
           </a>
           commented on
           <span title="${createDate}">${createDate.toDateString()}</span>
-          ${ createDate.toString() !== updateDate.toString()
-            ? ` • <span title="comment was edited at ${updateDate}">edited</span>`
-            : ''
+          ${
+            createDate.toString() !== updateDate.toString()
+              ? ` • <span title="comment was edited at ${updateDate}">edited</span>`
+              : ''
           }
-          <div class="gitment-comment-like-btn">${heartIcon} ${comment.reactions.heart || ''}</div>
+          <div class="gitment-comment-like-btn">${heartIcon} ${comment.reactions
+      .heart || ''}</div>
         </div>
-        <div class="gitment-comment-body gitment-markdown">${comment.body_html}</div>
+        <div class="gitment-comment-body gitment-markdown">${
+          comment.body_html
+        }</div>
       </div>
     `
     const likeButton = commentItem.querySelector('.gitment-comment-like-btn')
-    const likedReaction = commentReactions[comment.id]
-      && commentReactions[comment.id].find(reaction => (
-        reaction.content === 'heart' && reaction.user.login === user.login
-      ))
+    const likedReaction =
+      commentReactions[comment.id] &&
+      commentReactions[comment.id].find(
+        reaction =>
+          reaction.content === 'heart' && reaction.user.login === user.login
+      )
     if (likedReaction) {
       likeButton.classList.add('liked')
       likeButton.onclick = () => instance.unlikeAComment(comment.id)
@@ -142,7 +138,8 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
     const imgTrigger = document.createElement('img')
     const markdownBody = commentItem.querySelector('.gitment-comment-body')
     imgTrigger.className = 'gitment-hidden'
-    imgTrigger.src = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    imgTrigger.src =
+      'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
     imgTrigger.onload = () => {
       if (markdownBody.clientHeight > instance.maxCommentHeight) {
         markdownBody.classList.add('gitment-comment-body-folded')
@@ -203,19 +200,24 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
 
 function renderEditor({ user, error }, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = 'en-US'
   container.className = 'gitment-container gitment-editor-container'
 
   const shouldDisable = user.login && !error ? '' : 'disabled'
   const disabledTip = user.login ? '' : 'Login to Comment'
   container.innerHTML = `
-      ${ user.login
-        ? `<a class="gitment-editor-avatar" href="${user.html_url}" target="_blank">
+      ${
+        user.login
+          ? `<a class="gitment-editor-avatar" href="${
+              user.html_url
+            }" target="_blank">
             <img class="gitment-editor-avatar-img" src="${user.avatar_url}"/>
           </a>`
-        : user.isLoggingIn
-          ? `<div class="gitment-editor-avatar">${spinnerIcon}</div>`
-          : `<a class="gitment-editor-avatar" href="${instance.loginLink}" title="login with GitHub">
+          : user.isLoggingIn
+            ? `<div class="gitment-editor-avatar">${spinnerIcon}</div>`
+            : `<a class="gitment-editor-avatar" href="${
+                instance.loginLink
+              }" title="login with GitHub">
               ${githubIcon}
             </a>`
       }
@@ -227,11 +229,14 @@ function renderEditor({ user, error }, instance) {
           <button class="gitment-editor-tab">Preview</button>
         </nav>
         <div class="gitment-editor-login">
-          ${ user.login
-            ? '<a class="gitment-editor-logout-link">Logout</a>'
-            : user.isLoggingIn
-              ? 'Logging in...'
-              : `<a class="gitment-editor-login-link" href="${instance.loginLink}">Login</a> with GitHub`
+          ${
+            user.login
+              ? '<a class="gitment-editor-logout-link">Logout</a>'
+              : user.isLoggingIn
+                ? 'Logging in...'
+                : `<a class="gitment-editor-login-link" href="${
+                    instance.loginLink
+                  }">Login</a> with GitHub`
           }
         </div>
       </div>
@@ -252,7 +257,8 @@ function renderEditor({ user, error }, instance) {
     </div>
   `
   if (user.login) {
-    container.querySelector('.gitment-editor-logout-link').onclick = () => instance.logout()
+    container.querySelector('.gitment-editor-logout-link').onclick = () =>
+      instance.logout()
   }
 
   const writeField = container.querySelector('.gitment-editor-write-field')
@@ -266,11 +272,13 @@ function renderEditor({ user, error }, instance) {
     const clientHeight = textarea.clientHeight
     const scrollHeight = textarea.scrollHeight
     if (clientHeight < scrollHeight) {
-      textarea.style.height = (height + scrollHeight - clientHeight) + 'px'
+      textarea.style.height = height + scrollHeight - clientHeight + 'px'
     }
   }
 
-  const [writeTab, previewTab] = container.querySelectorAll('.gitment-editor-tab')
+  const [writeTab, previewTab] = container.querySelectorAll(
+    '.gitment-editor-tab'
+  )
   writeTab.onclick = () => {
     writeTab.classList.add('gitment-selected')
     previewTab.classList.remove('gitment-selected')
@@ -293,15 +301,15 @@ function renderEditor({ user, error }, instance) {
     }
 
     preview.innerText = 'Loading preview...'
-    instance.markdown(content)
-      .then(html => preview.innerHTML = html)
+    instance.markdown(content).then(html => (preview.innerHTML = html))
   }
 
   const submitButton = container.querySelector('.gitment-editor-submit')
   submitButton.onclick = () => {
     submitButton.innerText = 'Submitting...'
     submitButton.setAttribute('disabled', true)
-    instance.post(textarea.value.trim())
+    instance
+      .post(textarea.value.trim())
       .then(data => {
         textarea.value = ''
         textarea.style.height = 'auto'
@@ -320,7 +328,7 @@ function renderEditor({ user, error }, instance) {
 
 function renderFooter() {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = 'en-US'
   container.className = 'gitment-container gitment-footer-container'
   container.innerHTML = `
     Powered by
@@ -333,7 +341,7 @@ function renderFooter() {
 
 function render(state, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = 'en-US'
   container.className = 'gitment-container gitment-root-container'
   container.appendChild(instance.renderHeader(state, instance))
   container.appendChild(instance.renderComments(state, instance))
@@ -342,4 +350,10 @@ function render(state, instance) {
   return container
 }
 
-export default { render, renderHeader, renderComments, renderEditor, renderFooter }
+export default {
+  render,
+  renderHeader,
+  renderComments,
+  renderEditor,
+  renderFooter,
+}
